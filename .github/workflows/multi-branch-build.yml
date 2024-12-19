@@ -1,0 +1,47 @@
+name: Multi-Branch Build Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/*'
+      - 'release/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Environment Based on Branch
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "ENV=production" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "ENV=staging" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" =~ ^release/ ]]; then
+            echo "ENV=pre-production" >> $GITHUB_ENV
+          else
+            echo "ENV=testing" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Build Application
+        run: |
+          echo "Building branch: ${{ github.ref_name }}"
+          echo "Environment: $ENV"
+          # Replace with actual build commands, e.g.,
+          # npm install && npm run build
+
+      - name: Run Tests
+        run: |
+          echo "Running tests for environment: $ENV"
+          # Replace with actual test commands, e.g.,
+          # npm test
+
+      - name: Deploy
+        if: github.ref_name == 'main'
+        run: |
+          echo "Deploying to Production Environment"
+          # Add deployment steps for production
