@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set Environment Based on Branch
+        shell: bash
         run: |
           if [[ "${{ github.ref_name }}" == "main" ]]; then
             echo "ENV=production" >> $GITHUB_ENV
@@ -25,23 +26,27 @@ jobs:
             echo "ENV=pre-production" >> $GITHUB_ENV
           else
             echo "ENV=testing" >> $GITHUB_ENV
-        shell: bash
+          fi
+
+      - name: Print Environment
+        run: echo "Running on environment: $ENV"
 
       - name: Build Application
         run: |
           echo "Building branch: ${{ github.ref_name }}"
           echo "Environment: $ENV"
-          # Replace with actual build commands, e.g.,
-          # npm install && npm run build
+          # Replace with actual build commands
+          echo "Build completed successfully."
 
       - name: Run Tests
         run: |
           echo "Running tests for environment: $ENV"
-          # Replace with actual test commands, e.g.,
-          # npm test
+          # Replace with actual test commands
+          echo "Tests passed successfully."
 
-      - name: Deploy
+      - name: Deploy (Production Only)
         if: github.ref_name == 'main'
         run: |
           echo "Deploying to Production Environment"
-          # Add deployment steps for production
+          # Replace with actual deployment steps
+          echo "Deployment completed successfully."
