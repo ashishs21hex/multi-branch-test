@@ -29,7 +29,8 @@ jobs:
           fi
 
       - name: Print Environment
-        run: echo "Running on environment: $ENV"
+        run: |
+          echo "Running on environment: $ENV"
 
       - name: Build Application
         run: |
